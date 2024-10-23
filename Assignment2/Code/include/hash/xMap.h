@@ -203,22 +203,37 @@ xMap<K,V>::xMap(
                 bool (*keyEqual)(K& lhs, K& rhs),
                 void (*deleteKeys)(xMap<K,V>* pMap) ){
     //YOUR CODE IS HERE
+    capacity = 10;
+    this->hashCode = hashCode;
+    this->loadFactor = loadFactor;
+    this->valueEqual = valueEqual;
+    this->deleteValues = deleteValues;
+    this->keyEqual = keyEqual;
+    this->deleteKeys = deleteKeys;
 }
 
 template<class K, class V>
 xMap<K,V>::xMap(const xMap<K,V>& map){
     //YOUR CODE IS HERE
+    capacity = map.capacity;
+    this->hashCode = map.hashCode;
+    this->loadFactor = map.loadFactor;
+    this->valueEqual = map.valueEqual;
+    this->deleteValues = map.deleteValues;
+    this->keyEqual = map.keyEqual;
+    this->deleteKeys = map.deleteKeys;
 }
 
 template<class K, class V>
 xMap<K,V>& xMap<K,V>::operator=(const xMap<K,V>& map){
     //YOUR CODE IS HERE
+    xMap(map);
     return *this;
 }
 
 template<class K, class V>
 xMap<K,V>::~xMap(){
-    r//YOUR CODE IS HERE
+    //YOUR CODE IS HERE
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -230,6 +245,10 @@ V xMap<K,V>::put(K key, V value){
     int index = this->hashCode(key, capacity);
     V retValue = value;
     //YOUR CODE IS HERE    
+    DLinkedList list = table[index];
+    if (list.contains(Entry(key, value)) ){
+        Entry item = 
+    }
 
     return retValue;
 }
