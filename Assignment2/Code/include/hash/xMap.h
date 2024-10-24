@@ -246,7 +246,17 @@ V xMap<K,V>::put(K key, V value){
     V retValue = value;
     //YOUR CODE IS HERE    
     DLinkedList list = table[index];
-
+    if (keyEqual != NULL) {
+        for (DLinkedList::Iterator it = list.begin(); it != list.end(); it++){
+            if (keyEqual(*it.key, key)) *it.value = value;
+            else list.add(Entry(key, value));
+        }
+    } else {
+        for (DLinkedList::Iterator it = list.begin(); it != list.end(); it++){
+            if (*it.key == key) *it.value = value;
+            else list.add(Entry(key, value));
+        }
+    }
     return retValue;
 }
 
