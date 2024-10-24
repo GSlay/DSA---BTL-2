@@ -263,7 +263,9 @@ DLinkedList<T>::DLinkedList(const DLinkedList<T> &list)
     head->next = tail;
     tail->prev = head;
     count = 0;
-    copyFrom(list); 
+    if (list.count > 0) {
+        copyFrom(list);
+    } 
 }
 
 template <class T>
@@ -529,10 +531,11 @@ void DLinkedList<T>::copyFrom(const DLinkedList<T> &list)
      */
     // TODO
     removeInternalData();
-    setDeleteUserDataPtr(list->deleteUserData);
-    itemEqual = list->itemEqual;
-    for (int i = 0; i < list->count; i++){
-        add(list->get(i));
+    setDeleteUserDataPtr(list.deleteUserData);
+    itemEqual = list.itemEqual;
+    DLinkedList<T> l = list;
+    for (int i = 0; i < l.size(); i++) {
+        add(l.get(i));
     }
 }
 
