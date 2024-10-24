@@ -249,7 +249,7 @@ V xMap<K,V>::put(K key, V value){
     for (DLinkedList::Iterator it = list.begin(); it != list.end(); it++){
         if (keyEqual != NULL) {
             if (keyEqual(*it.key, key)) return key;
-            ok?
+            not ok?
         }
     }
 
