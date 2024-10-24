@@ -227,7 +227,7 @@ xMap<K,V>::xMap(const xMap<K,V>& map){
 template<class K, class V>
 xMap<K,V>& xMap<K,V>::operator=(const xMap<K,V>& map){
     //YOUR CODE IS HERE
-    xMap(map);
+    *this = xMap(map);
     return *this;
 }
 
@@ -245,25 +245,26 @@ V xMap<K,V>::put(K key, V value){
     int index = this->hashCode(key, capacity);
     V retValue = value;
     //YOUR CODE IS HERE    
-    DLinkedList list = table[index];
+    DLinkedList<Entry*> list = table[index];
+    typename DLinkedList<Entry*>::Iterator it;
     if (keyEqual != NULL) {
-        for (DLinkedList::Iterator it = list.begin(); it != list.end(); it++){
-            if (keyEqual(*it->key, key)) {
-                retValue = *it->value;
-                *it->value = value;
+        for (it = list.begin(); it != list.end(); it++){
+            if (keyEqual((*it)->key, key)) {
+                retValue = (*it)->value;
+                (*it)->value = value;
                 return retValue;
             }
         }
     } else {
-        for (DLinkedList::Iterator it = list.begin(); it != list.end(); it++){
-            if (keyEqual(*it->key, key)) {
-                retValue = *it->value;
-                *it->value = value;
+        for (it = list.begin(); it != list.end(); it++){
+            if ((*it)->key == key) {
+                retValue = (*it)->value;
+                (*it)->value = value;
                 return retValue;
             }
         }
     }
-    list.add(Entry(key, value));
+    list.add(new Entry(key, value));
     ensureLoadFactor(++count);
     return retValue;
 }
@@ -273,19 +274,20 @@ V& xMap<K,V>::get(K key){
     int index = hashCode(key, capacity);
     V retValue = value;
     //YOUR CODE IS HERE   
-    
-    DLinkedList list = table[index];
+
+    DLinkedList<Entry*> list = table[index];
+    typename DLinkedList<Entry*>::Iterator it;
     if (keyEqual != NULL) {
-        for (DLinkedList::Iterator it = list.begin(); it != list.end(); it++){
-            if (keyEqual(*it->key, key)) {
-                retValue = *it->value;
+        for (it = list.begin(); it != list.end(); it++){
+            if (keyEqual((*it)->key, key)) {
+                retValue = (*it)->value;
                 return retValue;
             }
         }
     } else {
-        for (DLinkedList::Iterator it = list.begin(); it != list.end(); it++){
-            if (keyEqual(*it->key, key)) {
-                retValue = *it->value;
+        for (it = list.begin(); it != list.end(); it++){
+            if ((*it)->key == key) {
+                retValue = (*it)->value;
                 return retValue;
             }
         }
@@ -303,6 +305,25 @@ V xMap<K,V>::remove(K key,void (*deleteKeyInMap)(K)){
     V retValue = value;
     //YOUR CODE IS HERE   
 
+    DLinkedList<Entry> list = table[index];
+    typename DLinkedList<Entry*>::Iterator it;
+    if (keyEqual != NULL) {
+        for (it = list.begin(); it != list.end(); it++){
+            if (keyEqual((*it)->key, key)) {
+                retValue = (*it)->value;
+                if (deleteKeyInMap != NULL) list.removeItem((*it), deleteEntry);
+                return retValue;
+            }
+        }
+    } else {
+        for (it = list.begin(); it != list.end(); it++){
+            if ((*it)->key == key) {
+                retValue = (*it)->value;
+                if (deleteKeyInMap != NULL) list.removeItem((*it), deleteEntry);
+                return retValue;
+            }
+        }
+    }
   
     //key: not found
     stringstream os;
@@ -313,6 +334,23 @@ V xMap<K,V>::remove(K key,void (*deleteKeyInMap)(K)){
 template<class K, class V>
 bool xMap<K,V>::remove(K key, V value, void (*deleteKeyInMap)(K), void (*deleteValueInMap)(V)){
     //YOUR CODE IS HERE   
+    DLinkedList<Entry*> list = table[index];
+    typename DLinkedList<Entry*>::Iterator it;
+    if (keyEqual != NULL) {
+        for (it = list.begin(); it != list.end(); it++){
+            if (keyEqual((*it)->key, key) and valueEqual((*it)->value, value)) {
+                if (deleteKeyInMap != NULL or deleteValueInMap != NULL) 
+                    list.removeItem((*it), deleteEntry);
+            }
+        }
+    } else {
+        for (it = list.begin(); it != list.end(); it++){
+            if ((*it)->key == key) {
+                if (deleteKeyInMap != NULL or deleteValueInMap != NULL) 
+                    list.removeItem((*it), deleteEntry);
+            }
+        }
+    }
 }
 
 template<class K, class V>
