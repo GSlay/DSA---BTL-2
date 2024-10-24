@@ -251,18 +251,20 @@ V xMap<K,V>::put(K key, V value){
             if (keyEqual(*it->key, key)) {
                 retValue = *it->value;
                 *it->value = value;
+                return retValue;
             }
-            else list.add(Entry(key, value));
         }
     } else {
         for (DLinkedList::Iterator it = list.begin(); it != list.end(); it++){
             if (keyEqual(*it->key, key)) {
                 retValue = *it->value;
                 *it->value = value;
+                return retValue;
             }
-            else list.add(Entry(key, value));
         }
     }
+    list.add(Entry(key, value));
+    ensureLoadFactor(++count);
     return retValue;
 }
 
