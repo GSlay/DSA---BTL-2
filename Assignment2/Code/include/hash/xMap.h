@@ -398,6 +398,8 @@ bool xMap<K,V>::containsValue(V value){
 template<class K, class V>
 bool xMap<K,V>::empty(){
     //YOUR CODE IS HERE 
+    if (count == 0) return true;
+    return false;
 }
 
 template<class K, class V>
