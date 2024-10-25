@@ -339,18 +339,23 @@ bool xMap<K,V>::remove(K key, V value, void (*deleteKeyInMap)(K), void (*deleteV
     if (keyEqual != NULL) {
         for (it = list.begin(); it != list.end(); it++){
             if (keyEqual((*it)->key, key) and valueEqual((*it)->value, value)) {
-                if (deleteKeyInMap != NULL or deleteValueInMap != NULL) 
+                if (deleteKeyInMap != NULL or deleteValueInMap != NULL) {
                     list.removeItem((*it), deleteEntry);
+                    return true;
+                }
             }
         }
     } else {
         for (it = list.begin(); it != list.end(); it++){
             if ((*it)->key == key) {
-                if (deleteKeyInMap != NULL or deleteValueInMap != NULL) 
+                if (deleteKeyInMap != NULL or deleteValueInMap != NULL) {
                     list.removeItem((*it), deleteEntry);
+                    return true;
+                }
             }
         }
     }
+    return false;
 }
 
 template<class K, class V>
