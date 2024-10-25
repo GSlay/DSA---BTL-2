@@ -361,6 +361,20 @@ bool xMap<K,V>::remove(K key, V value, void (*deleteKeyInMap)(K), void (*deleteV
 template<class K, class V>
 bool xMap<K,V>::containsKey(K key){
     //YOUR CODE IS HERE 
+    DLinkedList<Entry*> list = table[index];
+    typename DLinkedList<Entry*>::Iterator it;
+    if (keyEqual != NULL) {
+        for (it = list.begin(); it != list.end(); it++){
+            if (keyEqual((*it)->key, key))
+                    return true;
+                }
+    } else {
+        for (it = list.begin(); it != list.end(); it++){
+            if ((*it)->key == key)
+                return true;
+        }
+    }
+    return false;
 }
 
 template<class K, class V>
