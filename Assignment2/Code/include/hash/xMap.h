@@ -380,6 +380,20 @@ bool xMap<K,V>::containsKey(K key){
 template<class K, class V>
 bool xMap<K,V>::containsValue(V value){
     //YOUR CODE IS HERE 
+    DLinkedList<Entry*> list = table[index];
+    typename DLinkedList<Entry*>::Iterator it;
+    if (valueEqual != NULL) {
+        for (it = list.begin(); it != list.end(); it++){
+            if (valueEqual((*it)->value, value))
+                    return true;
+                }
+    } else {
+        for (it = list.begin(); it != list.end(); it++){
+            if ((*it)->value == value)
+                return true;
+        }
+    }
+    return false;
 }
 template<class K, class V>
 bool xMap<K,V>::empty(){
