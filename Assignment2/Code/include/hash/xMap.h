@@ -405,6 +405,7 @@ bool xMap<K,V>::empty(){
 template<class K, class V>
 int xMap<K,V>::size(){
     //YOUR CODE IS HERE 
+    return count;
 }
 
 template<class K, class V>
