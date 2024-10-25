@@ -204,6 +204,7 @@ xMap<K,V>::xMap(
                 void (*deleteKeys)(xMap<K,V>* pMap) ){
     //YOUR CODE IS HERE
     capacity = 10;
+    table = new DLinkedList<Entry* > [capacity];
     this->hashCode = hashCode;
     this->loadFactor = loadFactor;
     this->valueEqual = valueEqual;
@@ -411,6 +412,9 @@ int xMap<K,V>::size(){
 template<class K, class V>
 void xMap<K,V>::clear(){
     //YOUR CODE IS HERE 
+    removeInternalData();
+    capacity = 10;
+    table = new DLinkedList<Entry*> [capacity];
 }
 
 template<class K, class V>
