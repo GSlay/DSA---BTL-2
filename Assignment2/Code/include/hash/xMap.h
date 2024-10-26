@@ -420,7 +420,7 @@ void xMap<K,V>::clear(){
 template<class K, class V>
 DLinkedList<K> xMap<K,V>::keys(){
     //YOUR CODE IS HERE 
-    DLinkedList<K*> result;//list contains keys to return
+    DLinkedList<K> result;//list contains keys to return
     for (int i = 0; i < count; i++){
         DLinkedList<Entry*> list = table[i];//each table's index is a list contains entries
         typename DLinkedList<Entry*>::Iterator it;
@@ -434,6 +434,15 @@ DLinkedList<K> xMap<K,V>::keys(){
 template<class K, class V>
 DLinkedList<V> xMap<K,V>::values(){
     //YOUR CODE IS HERE 
+    DLinkedList<V> result;//list contains values to return
+    for (int i = 0; i < count; i++){
+        DLinkedList<Entry*> list = table[i];//each table's index is a list contains entries
+        typename DLinkedList<Entry*>::Iterator it;
+        for (it = list.begin(); it != list.end(); it++){
+            result.add((*it)->value);
+        }
+    }
+    return result;
 }
 
 template<class K, class V>
