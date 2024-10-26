@@ -101,11 +101,66 @@
 			]
 		},
 		{
+			"path": "Assignment2/Code/include/list/DLinkedList.h",
+			"bookmarks": [
+				{
+					"line": 15,
+					"column": 35,
+					"label": ""
+				},
+				{
+					"line": 242,
+					"column": 28,
+					"label": ""
+				},
+				{
+					"line": 404,
+					"column": 28,
+					"label": ""
+				},
+				{
+					"line": 536,
+					"column": 41,
+					"label": ""
+				}
+			]
+		},
+		{
 			"path": "Assignment2/Code/include/list/XArrayList.h",
 			"bookmarks": [
 				{
-					"line": 321,
+					"line": 213,
+					"column": 40,
+					"label": ""
+				},
+				{
+					"line": 251,
+					"column": 27,
+					"label": ""
+				},
+				{
+					"line": 324,
 					"column": 20,
+					"label": ""
+				}
+			]
+		},
+		{
+			"path": "Assignment2/Code/include/heap/Heap.h",
+			"bookmarks": [
+				{
+					"line": 32,
+					"column": 28,
+					"label": ""
+				},
+				{
+					"line": 119,
+					"column": 19,
+					"label": ""
+				},
+				{
+					"line": 165,
+					"column": 14,
 					"label": ""
 				}
 			]

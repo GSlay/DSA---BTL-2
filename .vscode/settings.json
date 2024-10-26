@@ -24,6 +24,7 @@
         "__hash_table": "cpp",
         "__split_buffer": "cpp",
         "__tree": "cpp",
-        "map": "cpp"
+        "map": "cpp",
+        "iostream": "cpp"
     }
 }

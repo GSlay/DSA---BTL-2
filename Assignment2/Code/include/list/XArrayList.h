@@ -220,7 +220,10 @@ void XArrayList<T>::removeInternalData()
      */
     // TODO
     if (deleteUserData != NULL) deleteUserData(this);
-    clear();
+    for (int i = 0; i < count; i++){
+        removeItem(data[i]);
+    }
+    count = 0;
     delete[] data;
 }
 
@@ -322,13 +325,8 @@ template <class T>
 void XArrayList<T>::clear()
 {
     // TODO
-    if (data == NULL) return;
-    for (int i = 0; i < count; i++){
-        removeItem(data[i]);
-    }
-    delete[] data;
+    removeInternalData();
     capacity = 10;
-    count = 0;
     data = new T[capacity];
 }
 
