@@ -448,6 +448,12 @@ DLinkedList<V> xMap<K,V>::values(){
 template<class K, class V>
 DLinkedList<int> xMap<K,V>::clashes(){
     //YOUR CODE IS HERE 
+    DLinkedList<int> result;//list contains size of each (list in table) to return
+    for (int i = 0; i < count; i++){
+        DLinkedList<Entry*> list = table[i];//each table's index is a list contains entries
+        result.add(list.size());
+    }
+    return result;
 }
 
 template<class K, class V>
