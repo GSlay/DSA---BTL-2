@@ -84,18 +84,28 @@
 					"label": ""
 				},
 				{
-					"line": 425,
+					"line": 434,
 					"column": 35,
 					"label": ""
 				},
 				{
-					"line": 430,
+					"line": 439,
 					"column": 38,
 					"label": ""
 				},
 				{
-					"line": 543,
+					"line": 552,
 					"column": 37,
+					"label": ""
+				}
+			]
+		},
+		{
+			"path": "Assignment2/Code/include/list/XArrayList.h",
+			"bookmarks": [
+				{
+					"line": 321,
+					"column": 20,
 					"label": ""
 				}
 			]
