@@ -258,11 +258,6 @@ template <class T>
 DLinkedList<T>::DLinkedList(const DLinkedList<T> &list)
 {
     // TODO
-    head = new Node();
-    tail = new Node();
-    head->next = tail;
-    tail->prev = head;
-    count = 0;
     if (list.count > 0) {
         copyFrom(list);
     } 
@@ -524,10 +519,9 @@ void DLinkedList<T>::copyFrom(const DLinkedList<T> &list)
      * Iterates through the source list and adds each element, preserving the order of the nodes.
      */
     // TODO
-    removeInternalData();
+    clear();
     setDeleteUserDataPtr(list.deleteUserData);
     itemEqual = list.itemEqual;
-    DLinkedList<T> l = list;
     for (int i = 0; i < l.size(); i++) {
         add(l.get(i));
     }

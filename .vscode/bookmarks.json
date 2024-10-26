@@ -34,67 +34,67 @@
 					"label": ""
 				},
 				{
-					"line": 244,
+					"line": 245,
 					"column": 33,
 					"label": ""
 				},
 				{
-					"line": 273,
+					"line": 274,
 					"column": 25,
 					"label": ""
 				},
 				{
-					"line": 303,
+					"line": 304,
 					"column": 53,
 					"label": ""
 				},
 				{
-					"line": 335,
+					"line": 336,
 					"column": 24,
 					"label": ""
 				},
 				{
-					"line": 362,
+					"line": 363,
 					"column": 22,
 					"label": ""
 				},
 				{
-					"line": 381,
+					"line": 382,
 					"column": 39,
 					"label": ""
 				},
 				{
-					"line": 399,
+					"line": 400,
 					"column": 24,
 					"label": ""
 				},
 				{
-					"line": 406,
+					"line": 407,
 					"column": 22,
 					"label": ""
 				},
 				{
-					"line": 412,
+					"line": 413,
 					"column": 24,
 					"label": ""
 				},
 				{
-					"line": 420,
+					"line": 421,
 					"column": 33,
 					"label": ""
 				},
 				{
-					"line": 434,
+					"line": 435,
 					"column": 35,
 					"label": ""
 				},
 				{
-					"line": 448,
+					"line": 449,
 					"column": 38,
 					"label": ""
 				},
 				{
-					"line": 567,
+					"line": 568,
 					"column": 37,
 					"label": ""
 				}
@@ -104,23 +104,18 @@
 			"path": "Assignment2/Code/include/list/DLinkedList.h",
 			"bookmarks": [
 				{
-					"line": 15,
-					"column": 35,
-					"label": ""
-				},
-				{
 					"line": 242,
 					"column": 28,
 					"label": ""
 				},
 				{
-					"line": 404,
-					"column": 28,
+					"line": 257,
+					"column": 55,
 					"label": ""
 				},
 				{
-					"line": 536,
-					"column": 41,
+					"line": 266,
+					"column": 69,
 					"label": ""
 				}
 			]
@@ -129,17 +124,22 @@
 			"path": "Assignment2/Code/include/list/XArrayList.h",
 			"bookmarks": [
 				{
+					"line": 193,
+					"column": 0,
+					"label": ""
+				},
+				{
 					"line": 213,
 					"column": 40,
 					"label": ""
 				},
 				{
-					"line": 251,
+					"line": 249,
 					"column": 27,
 					"label": ""
 				},
 				{
-					"line": 324,
+					"line": 322,
 					"column": 20,
 					"label": ""
 				}
@@ -161,6 +161,16 @@
 				{
 					"line": 165,
 					"column": 14,
+					"label": ""
+				},
+				{
+					"line": 175,
+					"column": 35,
+					"label": ""
+				},
+				{
+					"line": 184,
+					"column": 49,
 					"label": ""
 				}
 			]

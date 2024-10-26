@@ -199,11 +199,11 @@ void XArrayList<T>::copyFrom(const XArrayList<T> &list)
      * Also duplicates user-defined comparison and deletion functions, if applicable.
      */
     // TODO
+    removeInternalData();
     capacity = list.capacity;
     count = list.count;
     setDeleteUserDataPtr(list.deleteUserData);
     itemEqual = list.itemEqual;
-    delete[] data;
     data = new T[capacity];
     for (int i = 0; i < count; i++){
         add(list.get(i));
@@ -231,21 +231,19 @@ template <class T>
 XArrayList<T>::XArrayList(const XArrayList<T> &list)
 {
     // TODO
-    capacity = list.capacity;
-    count = list.count;
-    delete[] data;
-    data = new T[capacity];
-    for (int i = 0; i < count; i++){
-        add(list.get(i));
-    }
-    
+    if (this != &list) {
+        copyFrom(list);
+    } 
 }
 
 template <class T>
 XArrayList<T> &XArrayList<T>::operator=(const XArrayList<T> &list)
 {
     // TODO
-    copyFrom(list);
+    if (this != &list) {
+        copyFrom(list);
+    }
+    return *this;
 }
 
 template <class T>
