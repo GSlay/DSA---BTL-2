@@ -283,8 +283,6 @@ DLinkedList<T>::~DLinkedList()
 {
     // TODO
     removeInternalData();
-    delete head;
-    delete tail;
 }
 
 template <class T>
@@ -407,15 +405,11 @@ template <class T>
 void DLinkedList<T>::clear()
 {
     // TODO
-    Node *tmp;
-    Node *removing_item = head->next;
-    while (removing_item != tail){
-        tmp = removing_item;
-        removing_item = removing_item->next;
-        if (tmp != tail) removeItem(tmp->data);
-    }
-    tail->prev = head;
+    removeInternalData();
+    head = new Node();
+    tail = new Node();
     head->next = tail;
+    tail->prev = head;
     count = 0;
 }
 
@@ -551,7 +545,16 @@ void DLinkedList<T>::removeInternalData()
     if (deleteUserData != NULL){
             deleteUserData(this);
         }
-    clear();
+    Node *tmp;
+    Node *removing_item = head->next;
+    while (removing_item != tail){
+        tmp = removing_item;
+        removing_item = removing_item->next;
+        if (tmp != tail) removeItem(tmp->data);
+    }
+    delete tail;
+    delete head;
+    count = 0;
 }
 
 #endif /* DLINKEDLIST_H */
