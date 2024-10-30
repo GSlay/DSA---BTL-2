@@ -217,24 +217,30 @@ template<class K, class V>
 xMap<K,V>::xMap(const xMap<K,V>& map){
     //YOUR CODE IS HERE
     capacity = map.capacity;
+    table = new DLinkedList<Entry* > [capacity];
     this->hashCode = map.hashCode;
     this->loadFactor = map.loadFactor;
     this->valueEqual = map.valueEqual;
     this->deleteValues = map.deleteValues;
     this->keyEqual = map.keyEqual;
     this->deleteKeys = map.deleteKeys;
+    copyMapFrom(map);
 }
 
 template<class K, class V>
 xMap<K,V>& xMap<K,V>::operator=(const xMap<K,V>& map){
     //YOUR CODE IS HERE
-    *this = xMap(map);
+    if (this != &map) {
+        // Assuming copyMapFrom is a function that properly copies all elements from `map` to this map
+        copyMapFrom(map); // directly copy data from `map` to this instance
+    }
     return *this;
 }
 
 template<class K, class V>
 xMap<K,V>::~xMap(){
     //YOUR CODE IS HERE
+    removeInternalData();
 }
 
 //////////////////////////////////////////////////////////////////////
