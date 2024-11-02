@@ -175,12 +175,15 @@ Heap<T>::Heap(
 template<class T>
 Heap<T>::Heap(const Heap<T>& heap){
     //YOUR CODE IS HERE
-    
+    clear();
+    copyFrom(heap);
 }
 
 template<class T>
 Heap<T>& Heap<T>::operator=(const Heap<T>& heap){
     //YOUR CODE IS HERE
+    clear();
+    copyFrom(heap);
     return *this;
 }
 
@@ -188,11 +191,16 @@ Heap<T>& Heap<T>::operator=(const Heap<T>& heap){
 template<class T>
 Heap<T>::~Heap(){
     //YOUR CODE IS HERE
+    removeInternalData();
 }
 
 template<class T>
 void Heap<T>::push(T item){ //item  = 25
     //YOUR CODE IS HERE
+    ensureCapacity(count+1);
+    elements[count] = item;
+    reheapUp(count);
+    count++;
 }
 /*
       18
@@ -213,6 +221,14 @@ void Heap<T>::push(T item){ //item  = 25
 template<class T>
 T Heap<T>::pop(){
     //YOUR CODE IS HERE
+    if (count == 0) {
+        throw std::underflow_error("Calling to peek with the empty heap.");
+    }
+    T item = elements[0];
+    elements[0] = elements[count-1];
+    reheapDown(count);
+    count--;
+    return item;
 }
 
 /*
