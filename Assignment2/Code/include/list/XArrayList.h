@@ -201,11 +201,11 @@ void XArrayList<T>::copyFrom(const XArrayList<T> &list)
     // TODO
     removeInternalData();
     capacity = list.capacity;
-    count = list.count;
+    count = 0;
     setDeleteUserDataPtr(list.deleteUserData);
     itemEqual = list.itemEqual;
     data = new T[capacity];
-    for (int i = 0; i < count; i++){
+    for (int i = 0; i < list.count; i++){
         add(list.get(i));
     }
 }
@@ -220,9 +220,6 @@ void XArrayList<T>::removeInternalData()
      */
     // TODO
     if (deleteUserData != NULL) deleteUserData(this);
-    for (int i = 0; i < count; i++){
-        removeItem(data[i]);
-    }
     count = 0;
     delete[] data;
 }
@@ -231,9 +228,7 @@ template <class T>
 XArrayList<T>::XArrayList(const XArrayList<T> &list)
 {
     // TODO
-    if (this != &list) {
-        copyFrom(list);
-    } 
+    copyFrom(list);
 }
 
 template <class T>

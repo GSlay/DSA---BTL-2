@@ -175,14 +175,14 @@ Heap<T>::Heap(
 template<class T>
 Heap<T>::Heap(const Heap<T>& heap){
     //YOUR CODE IS HERE
-    clear();
     copyFrom(heap);
 }
 
 template<class T>
 Heap<T>& Heap<T>::operator=(const Heap<T>& heap){
     //YOUR CODE IS HERE
-    clear();
+    if (this == &heap) return;
+    removeInternalData();
     copyFrom(heap);
     return *this;
 }
@@ -261,21 +261,29 @@ bool Heap<T>::contains(T item){
 template<class T>
 int Heap<T>::size(){
     //YOUR CODE IS HERE
+    return count;
 }
 
 template<class T>
 void Heap<T>::heapify(T array[], int size){
     //YOUR CODE IS HERE
+    for (int i = 0; i <= (int)array.size(); i++){
+        push(array[i]);
+    }
 }
 
 template<class T>
 void Heap<T>::clear(){
     //YOUR CODE IS HERE
+    removeInternalData();
+    capacity = 10;
+    elements = new T[capacity];
 }
 
 template<class T>
 bool Heap<T>::empty(){
     //YOUR CODE IS HERE
+    return (count == 0);
 }
 
 template<class T>
@@ -332,11 +340,45 @@ void Heap<T>::swap(int a, int b){
 template<class T>
 void Heap<T>::reheapUp(int position){
     //YOUR CODE IS HERE
+    int parentIndex = (position - 1) / 2;  // Vị trí của cha
+
+    // Lặp cho đến khi index là gốc hoặc không cần hoán đổi
+    while (position > 0 and aLTb(elements[position], elements[parentIndex])) {
+        // Hoán đổi phần tử hiện tại với phần tử cha
+        swap(position, parentIndex);
+
+        // Di chuyển lên vị trí cha
+        position = parentIndex;
+        parentIndex = (index - 1) / 2;
+    }
 }
 
 template<class T>
 void Heap<T>::reheapDown(int position){
     //YOUR CODE IS HERE
+    int leftChild, rightChild, largerChild;
+
+    while (position < count / 2) {  // Chạy đến khi index là nút lá
+        leftChild = 2 * position + 1;    // Vị trí con trái
+        rightChild = 2 * position + 2;   // Vị trí con phải
+        tmpChild = leftChild;      // Giả sử con trái là lớn hơn
+
+        // Kiểm tra nếu con phải lớn hơn con trái
+        if (rightChild < size && aLTb(heap[rightChild], heap[leftChild]) ) {
+            largerChild = rightChild;
+        }
+
+        // Nếu phần tử hiện tại lớn hơn hoặc bằng phần tử con lớn hơn, dừng lại
+        if (aLTb(heap[index], heap[tmpChild])) {
+            break;
+        }
+
+        // Hoán đổi phần tử hiện tại với phần tử con lớn hơn
+        swap(heap[index], heap[tmpChild]);
+
+        // Di chuyển xuống vị trí con
+        index = tmpChild;
+    }
 }
 
 template<class T>
