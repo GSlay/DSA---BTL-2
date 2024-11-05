@@ -170,6 +170,7 @@ Heap<T>::Heap(
     this->comparator = comparator;
     this->deleteUserData = deleteUserData;
     capacity = 10;
+    count = 0;
     elements = new T[capacity];
 }
 template<class T>
@@ -245,12 +246,20 @@ T Heap<T>::pop(){
 template<class T>
 const T Heap<T>::peek(){
     //YOUR CODE IS HERE
+    return elements[0];
 }
 
 
 template<class T>
 void Heap<T>::remove(T item, void (*removeItemData)(T)){
     //YOUR CODE IS HERE
+    int idx = getItem(item);
+    if (idx == -1) return;
+    if (removeItemData != NULL) 
+        removeItemData(elements[idx]); 
+    elements[idx] = elements[--count];
+    reheapDown(idx);
+    
 }
 
 template<class T>
