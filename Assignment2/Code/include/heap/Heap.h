@@ -265,6 +265,10 @@ void Heap<T>::remove(T item, void (*removeItemData)(T)){
 template<class T>
 bool Heap<T>::contains(T item){
     //YOUR CODE IS HERE
+    for (int i = 0; i < count; i++){
+        if (elements[i] == item) return true;
+    }
+    return false;
 }
 
 template<class T>
