@@ -224,6 +224,16 @@
 					"label": ""
 				}
 			]
+		},
+		{
+			"path": "Assignment2/Code/src/ann/layer/FCLayer.cpp",
+			"bookmarks": [
+				{
+					"line": 146,
+					"column": 1,
+					"label": ""
+				}
+			]
 		}
 	]
 }
