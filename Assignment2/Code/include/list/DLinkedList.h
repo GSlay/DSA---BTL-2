@@ -245,13 +245,13 @@ DLinkedList<T>::DLinkedList(
     bool (*itemEqual)(T &, T &))
 {
     // TODO
+    count = 0;
+    setDeleteUserDataPtr(deleteUserData);
+    this->itemEqual = itemEqual;
     head = new Node();
     tail = new Node();
     head->next = tail;
     tail->prev = head;
-    count = 0;
-    setDeleteUserDataPtr(deleteUserData);
-    this->itemEqual = itemEqual;
 }
 
 template <class T>
@@ -456,18 +456,20 @@ bool DLinkedList<T>::contains(T item)
     // TODO
     if (itemEqual != NULL){
         Node *current = head->next;
-        for (int i = 0; i < count; i++){
-            if(itemEqual(current->data, item)) return true;
+        while(current != tail) {
+            if(itemEqual((current->data), item)) return true;
             current = current->next;
         }
         return false;
     }
-    Node *current = head->next;
-    for (int i = 0; i < count; i++){
-        if(current->data == item) return true;
-        current = current->next;
+    else {
+        Node *current = head->next;
+        while(current != tail) {
+            if(current->data == item) return true;
+            current = current->next;
+        }
+        return false;
     }
-    return false;
 }
 
 template <class T>
@@ -518,10 +520,14 @@ void DLinkedList<T>::copyFrom(const DLinkedList<T> &list)
      */
     // TODO
     clear();
-    setDeleteUserDataPtr(list.deleteUserData);
-    itemEqual = list.itemEqual;
-    for (int i = 0; i < list.size(); i++) {
-        add(list.get(i));
+    if (list.deleteUserData != NULL) 
+        setDeleteUserDataPtr(list.deleteUserData);
+    if (list.itemEqual != NULL) 
+        itemEqual = list.itemEqual;
+    Node* current = list.head->next;
+    while (current != list.tail) {
+        add(current->data);
+        current = current->next;
     }
 }
 
@@ -534,8 +540,7 @@ void DLinkedList<T>::removeInternalData()
      * Traverses and deletes each node between the head and tail to release memory.
      */
     // TODO
-    if (empty()) return;
-    if (deleteUserData != NULL){
+    if (deleteUserData != NULL and !empty()){
         deleteUserData(this);
     }
     Node *tmp;
@@ -548,6 +553,8 @@ void DLinkedList<T>::removeInternalData()
     delete tail;
     delete head;
     count = 0;
+    itemEqual = NULL;
+    deleteUserData = NULL;
 }
 
 #endif /* DLINKEDLIST_H */

@@ -280,7 +280,7 @@ int Heap<T>::size(){
 template<class T>
 void Heap<T>::heapify(T array[], int size){
     //YOUR CODE IS HERE
-    for (int i = 0; i < (int)array->size(); i++){
+    for (int i = 0; i < size; i++){
         push(array[i]);
     }
 }
@@ -377,17 +377,17 @@ void Heap<T>::reheapDown(int position){
         tmpChild = leftChild;      // Giả sử con trái là lớn hơn
 
         // Kiểm tra nếu con phải lớn hơn con trái
-        if (rightChild < size && aLTb(elements[rightChild], elements[leftChild]) ) {
+        if (rightChild < count and aLTb(elements[rightChild], elements[leftChild]) ) {
             tmpChild = rightChild;
         }
 
         // Nếu phần tử hiện tại lớn hơn hoặc bằng phần tử con lớn hơn, dừng lại
-        if (aLTb(elements[index], elements[tmpChild])) {
+        if (aLTb(elements[position], elements[tmpChild])) {
             break;
         }
 
         // Hoán đổi phần tử hiện tại với phần tử con lớn hơn
-        swap(elements[index], elements[tmpChild]);
+        swap(position, tmpChild);
 
         // Di chuyển xuống vị trí con
         position = tmpChild;
