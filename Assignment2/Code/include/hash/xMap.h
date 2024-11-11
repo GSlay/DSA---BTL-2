@@ -279,7 +279,6 @@ V xMap<K,V>::put(K key, V value){
 template<class K, class V>
 V& xMap<K,V>::get(K key){
     int index = hashCode(key, capacity);
-    V retValue = value;
     //YOUR CODE IS HERE   
 
     DLinkedList<Entry*> list = table[index];
@@ -287,14 +286,14 @@ V& xMap<K,V>::get(K key){
     if (keyEqual != NULL) {
         for (it = list.begin(); it != list.end(); it++){
             if (keyEqual((*it)->key, key)) {
-                retValue = (*it)->value;
+                V retValue = (*it)->value;
                 return retValue;
             }
         }
     } else {
         for (it = list.begin(); it != list.end(); it++){
             if ((*it)->key == key) {
-                retValue = (*it)->value;
+                V retValue = (*it)->value;
                 return retValue;
             }
         }
@@ -309,7 +308,6 @@ V& xMap<K,V>::get(K key){
 template<class K, class V>
 V xMap<K,V>::remove(K key,void (*deleteKeyInMap)(K)){
     int index = hashCode(key, capacity);
-    V retValue = value;
     //YOUR CODE IS HERE   
 
     DLinkedList<Entry> list = table[index];
@@ -317,7 +315,7 @@ V xMap<K,V>::remove(K key,void (*deleteKeyInMap)(K)){
     if (keyEqual != NULL) {
         for (it = list.begin(); it != list.end(); it++){
             if (keyEqual((*it)->key, key)) {
-                retValue = (*it)->value;
+                V retValue = (*it)->value;
                 if (deleteKeyInMap != NULL) list.removeItem((*it), deleteEntry);
                 return retValue;
             }
@@ -325,7 +323,7 @@ V xMap<K,V>::remove(K key,void (*deleteKeyInMap)(K)){
     } else {
         for (it = list.begin(); it != list.end(); it++){
             if ((*it)->key == key) {
-                retValue = (*it)->value;
+                V retValue = (*it)->value;
                 if (deleteKeyInMap != NULL) list.removeItem((*it), deleteEntry);
                 return retValue;
             }
@@ -341,6 +339,7 @@ V xMap<K,V>::remove(K key,void (*deleteKeyInMap)(K)){
 template<class K, class V>
 bool xMap<K,V>::remove(K key, V value, void (*deleteKeyInMap)(K), void (*deleteValueInMap)(V)){
     //YOUR CODE IS HERE   
+    int index = hashCode(key, capacity);
     DLinkedList<Entry*> list = table[index];
     typename DLinkedList<Entry*>::Iterator it;
     if (keyEqual != NULL) {
@@ -368,6 +367,7 @@ bool xMap<K,V>::remove(K key, V value, void (*deleteKeyInMap)(K), void (*deleteV
 template<class K, class V>
 bool xMap<K,V>::containsKey(K key){
     //YOUR CODE IS HERE 
+    int index = hashCode(key, capacity);
     DLinkedList<Entry*> list = table[index];
     typename DLinkedList<Entry*>::Iterator it;
     if (keyEqual != NULL) {
@@ -387,6 +387,7 @@ bool xMap<K,V>::containsKey(K key){
 template<class K, class V>
 bool xMap<K,V>::containsValue(V value){
     //YOUR CODE IS HERE 
+    int index = hashCode(key, capacity);
     DLinkedList<Entry*> list = table[index];
     typename DLinkedList<Entry*>::Iterator it;
     if (valueEqual != NULL) {
