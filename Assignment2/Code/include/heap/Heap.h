@@ -378,7 +378,7 @@ void Heap<T>::reheapDown(int position){
 
         // Kiểm tra nếu con phải lớn hơn con trái
         if (rightChild < size && aLTb(elements[rightChild], elements[leftChild]) ) {
-            largerChild = rightChild;
+            tmpChild = rightChild;
         }
 
         // Nếu phần tử hiện tại lớn hơn hoặc bằng phần tử con lớn hơn, dừng lại
@@ -397,6 +397,10 @@ void Heap<T>::reheapDown(int position){
 template<class T>
 int Heap<T>::getItem(T item){
     //YOUR CODE IS HERE
+    for (int i = 0; i < count; i++){
+        if (elements[i] == item) return i;
+    }
+    return -1;
 }
 
 template<class T>

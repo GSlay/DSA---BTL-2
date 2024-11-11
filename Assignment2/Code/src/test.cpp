@@ -6,6 +6,8 @@ using namespace std;
 
 #include <list/DLinkedListDemo.h>
 #include <list/XArrayListDemo.h>
+#include <heap/HeapDemo.h>
+#include <hash/xMapDemo.h>
 
 int main(){
     cout << "\ndlistDemo1\n";

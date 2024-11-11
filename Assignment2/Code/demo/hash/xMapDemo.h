@@ -17,7 +17,7 @@
 #include "util/Point.h"
 #include "util/ArrayLib.h"
 #include "util/sampleFunc.h"
-#include "util/FuncLib.h"
+#include "dsaheader.h"
 
 
 int hashFunc(int& key, int tablesize) {
