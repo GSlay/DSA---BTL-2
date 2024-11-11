@@ -145,6 +145,7 @@ FCLayer::~FCLayer() {
 xt::xarray<double> FCLayer::forward(xt::xarray<double> X) {
     //YOUR CODE IS HERE
     // Linear transformation
+    m_aCached_X = X;
     xt::xarray<double> Z = xt::linalg::dot(X, m_aWeights);
     if (m_bUse_Bias) {
         Z += m_aBias;
@@ -156,7 +157,7 @@ xt::xarray<double> FCLayer::forward(xt::xarray<double> X) {
 xt::xarray<double> FCLayer::backward(xt::xarray<double> DY) {
     //YOUR CODE IS HERE
         // Gradient of weights: dL/dW = dL/dY * dY/dW
-    m_aGrad_W = xt::linalg::dot(xt::transpose(DY), X);
+    m_aGrad_W = xt::linalg::dot(xt::transpose(DY), m_aCached_X);
 
     // Gradient of bias: dL/db = dL/dY
     if (m_bUse_Bias) {
