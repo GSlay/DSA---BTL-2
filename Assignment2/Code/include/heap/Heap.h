@@ -280,7 +280,7 @@ int Heap<T>::size(){
 template<class T>
 void Heap<T>::heapify(T array[], int size){
     //YOUR CODE IS HERE
-    for (int i = 0; i <= (int)array.size(); i++){
+    for (int i = 0; i < (int)array->size(); i++){
         push(array[i]);
     }
 }
