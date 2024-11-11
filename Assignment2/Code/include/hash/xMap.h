@@ -280,7 +280,6 @@ template<class K, class V>
 V& xMap<K,V>::get(K key){
     int index = hashCode(key, capacity);
     //YOUR CODE IS HERE   
-
     DLinkedList<Entry*> list = table[index];
     typename DLinkedList<Entry*>::Iterator it;
     if (keyEqual != NULL) {
@@ -309,8 +308,7 @@ template<class K, class V>
 V xMap<K,V>::remove(K key,void (*deleteKeyInMap)(K)){
     int index = hashCode(key, capacity);
     //YOUR CODE IS HERE   
-
-    DLinkedList<Entry> list = table[index];
+    DLinkedList<Entry*> list = table[index];
     typename DLinkedList<Entry*>::Iterator it;
     if (keyEqual != NULL) {
         for (it = list.begin(); it != list.end(); it++){

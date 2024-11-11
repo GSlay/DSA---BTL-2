@@ -182,7 +182,7 @@ Heap<T>::Heap(const Heap<T>& heap){
 template<class T>
 Heap<T>& Heap<T>::operator=(const Heap<T>& heap){
     //YOUR CODE IS HERE
-    if (this == &heap) return;
+    if (this == &heap) return *this;
     removeInternalData();
     copyFrom(heap);
     return *this;
@@ -362,14 +362,14 @@ void Heap<T>::reheapUp(int position){
 
         // Di chuyển lên vị trí cha
         position = parentIndex;
-        parentIndex = (index - 1) / 2;
+        parentIndex = (position - 1) / 2;
     }
 }
 
 template<class T>
 void Heap<T>::reheapDown(int position){
     //YOUR CODE IS HERE
-    int leftChild, rightChild, largerChild;
+    int leftChild, rightChild, tmpChild;
 
     while (position < count / 2) {  // Chạy đến khi index là nút lá
         leftChild = 2 * position + 1;    // Vị trí con trái
@@ -377,20 +377,20 @@ void Heap<T>::reheapDown(int position){
         tmpChild = leftChild;      // Giả sử con trái là lớn hơn
 
         // Kiểm tra nếu con phải lớn hơn con trái
-        if (rightChild < size && aLTb(heap[rightChild], heap[leftChild]) ) {
+        if (rightChild < size && aLTb(elements[rightChild], elements[leftChild]) ) {
             largerChild = rightChild;
         }
 
         // Nếu phần tử hiện tại lớn hơn hoặc bằng phần tử con lớn hơn, dừng lại
-        if (aLTb(heap[index], heap[tmpChild])) {
+        if (aLTb(elements[index], elements[tmpChild])) {
             break;
         }
 
         // Hoán đổi phần tử hiện tại với phần tử con lớn hơn
-        swap(heap[index], heap[tmpChild]);
+        swap(elements[index], elements[tmpChild]);
 
         // Di chuyển xuống vị trí con
-        index = tmpChild;
+        position = tmpChild;
     }
 }
 
