@@ -310,6 +310,7 @@ V xMap<K,V>::remove(K key,void (*deleteKeyInMap)(K)){
             if (keyEqual((*it)->key, key)) {
                 V retValue = (*it)->value;
                 if (deleteKeyInMap != NULL) table[index].removeItem((*it), deleteEntry);
+                count--;
                 return retValue;
             }
         }
@@ -318,6 +319,7 @@ V xMap<K,V>::remove(K key,void (*deleteKeyInMap)(K)){
             if ((*it)->key == key) {
                 V retValue = (*it)->value;
                 if (deleteKeyInMap != NULL) table[index].removeItem((*it), deleteEntry);
+                count--;
                 return retValue;
             }
         }
@@ -339,6 +341,7 @@ bool xMap<K,V>::remove(K key, V value, void (*deleteKeyInMap)(K), void (*deleteV
             if (keyEqual((*it)->key, key) and valueEqual((*it)->value, value)) {
                 if (deleteKeyInMap != NULL or deleteValueInMap != NULL) {
                     table[index].removeItem((*it), deleteEntry);
+                    count--;
                     return true;
                 }
             }
@@ -348,6 +351,7 @@ bool xMap<K,V>::remove(K key, V value, void (*deleteKeyInMap)(K), void (*deleteV
             if ((*it)->key == key) {
                 if (deleteKeyInMap != NULL or deleteValueInMap != NULL) {
                     table[index].removeItem((*it), deleteEntry);
+                    count--;
                     return true;
                 }
             }
@@ -419,7 +423,7 @@ template<class K, class V>
 DLinkedList<K> xMap<K,V>::keys(){
     //YOUR CODE IS HERE 
     DLinkedList<K> result;//list contains keys to return
-    for (int i = 0; i < count; i++){
+    for (int i = 0; i < capacity; i++){
         typename DLinkedList<Entry*>::Iterator it;
         for (it = table[i].begin(); it != table[i].end(); it++){
             result.add((*it)->key);
@@ -432,7 +436,7 @@ template<class K, class V>
 DLinkedList<V> xMap<K,V>::values(){
     //YOUR CODE IS HERE 
     DLinkedList<V> result;//list contains values to return
-    for (int i = 0; i < count; i++){
+    for (int i = 0; i < capacity; i++){
         typename DLinkedList<Entry*>::Iterator it;
         if (table[i].empty()) continue;
         for (it = table[i].begin(); it != table[i].end(); it++){
@@ -446,7 +450,7 @@ template<class K, class V>
 DLinkedList<int> xMap<K,V>::clashes(){
     //YOUR CODE IS HERE 
     DLinkedList<int> result;//list contains size of each (list in table) to return
-    for (int i = 0; i < count; i++){
+    for (int i = 0; i < capacity; i++){
         result.add(table[i].size());
     }
     return result;
@@ -574,6 +578,7 @@ void xMap<K,V>::removeInternalData(){
     }
 
     //Remove table
+    count = 0;
     delete []table;
 }
 

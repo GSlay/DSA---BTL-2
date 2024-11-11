@@ -144,9 +144,29 @@ FCLayer::~FCLayer() {
 
 xt::xarray<double> FCLayer::forward(xt::xarray<double> X) {
     //YOUR CODE IS HERE
+    // Linear transformation
+    xt::xarray<double> Z = xt::linalg::dot(X, m_aWeights);
+    if (m_bUse_Bias) {
+        Z += m_aBias;
+    }
+
+    // Optional activation function (e.g., ReLU)
+    return xt::maximum(Z, 0);
 }
 xt::xarray<double> FCLayer::backward(xt::xarray<double> DY) {
     //YOUR CODE IS HERE
+        // Gradient of weights: dL/dW = dL/dY * dY/dW
+    m_aGrad_W = xt::linalg::dot(xt::transpose(DY), X);
+
+    // Gradient of bias: dL/db = dL/dY
+    if (m_bUse_Bias) {
+        m_aGrad_b = xt::sum(DY, {0}); // Sum over batch dimension
+    }
+
+    // Gradient of input: dL/dX = dL/dY * dY/dX
+    xt::xarray<double> DX = xt::linalg::dot(DY, xt::transpose(m_aWeights));
+
+    return DX;
 }
 
 int FCLayer::register_params(IParamGroup* ptr_group){
