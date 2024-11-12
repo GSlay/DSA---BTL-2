@@ -227,7 +227,7 @@ T Heap<T>::pop(){
     }
     T item = elements[0];
     elements[0] = elements[count-1];
-    reheapDown(count);
+    reheapDown(0);
     count--;
     return item;
 }
