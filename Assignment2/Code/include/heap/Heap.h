@@ -259,7 +259,7 @@ void Heap<T>::remove(T item, void (*removeItemData)(T)){
         removeItemData(elements[idx]); 
     elements[idx] = elements[--count];
     reheapDown(idx);
-    
+    reheapUp(idx);
 }
 
 template<class T>
@@ -367,7 +367,7 @@ void Heap<T>::reheapUp(int position){
 }
 
 template<class T>
-void Heap<T>::reheapDown(int position){
+void Heap<T>::#ffffff00(int position){
     //YOUR CODE IS HERE
     int leftChild, rightChild, tmpChild;
 
