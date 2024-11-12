@@ -27,9 +27,17 @@ Sigmoid::~Sigmoid() {
 }
 xt::xarray<double> Sigmoid::forward(xt::xarray<double> X) {
     //YOUR CODE IS HERE
+    // Tính toán đầu ra Y của Sigmoid theo công thức Y = 1 / (1 + exp(-X))
+    m_aCached_Y = 1.0 / (1.0 + xt::exp(-X));  // Áp dụng hàm Sigmoid
+
+    return m_aCached_Y;
+
 }
 xt::xarray<double> Sigmoid::backward(xt::xarray<double> DY) {
     //YOUR CODE IS HERE
+    xt::xarray<double> dX = DY * m_aCached_Y * (1.0 - m_aCached_Y);  // Áp dụng đạo hàm Sigmoid
+
+    return dX;
 }
 
 string Sigmoid::get_desc(){

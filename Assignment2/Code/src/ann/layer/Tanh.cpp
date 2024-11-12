@@ -28,9 +28,21 @@ Tanh::~Tanh() {
 
 xt::xarray<double> Tanh::forward(xt::xarray<double> X) {
     //YOUR CODE IS HERE
+    // Tính e^X và e^(-X)
+    xt::xarray<double> exp_X = xt::exp(X);  // e^X
+    xt::xarray<double> exp_neg_X = xt::exp(-X);  // e^(-X)
+    
+    // Tính tanh(X) = (e^X - e^(-X)) / (e^X + e^(-X))
+    m_aCached_Y = (exp_X - exp_neg_X) / (exp_X + exp_neg_X);
+    
+    return m_aCached_Y;
 }
 xt::xarray<double> Tanh::backward(xt::xarray<double> DY) {
     //YOUR CODE IS HERE
+    // Tính gradient theo công thức DX = DY ⊙ (1 - Y ⊙ Y)    
+    xt::xarray<double> DX = DY * (1.0 - m_aCached_Y * m_aCached_Y);
+    
+    return DX;
 }
 
 string Tanh::get_desc(){

@@ -144,30 +144,24 @@ FCLayer::~FCLayer() {
 
 xt::xarray<double> FCLayer::forward(xt::xarray<double> X) {
     //YOUR CODE IS HERE
-    // Linear transformation
-    m_aCached_X = X;
-    xt::xarray<double> Z = xt::linalg::dot(X, m_aWeights);
-    if (m_bUse_Bias) {
-        Z += m_aBias;
+    if (m_trainable) {
+        m_aCached_X = X;
     }
-
-    // Optional activation function (e.g., ReLU)
-    return xt::maximum(Z, 0);
+    auto Y = xt::linalg::tensordot(X, xt::transpose(m_aWeights), {1}, {0});
+    if (m_bUse_Bias) {
+        Y += m_aBias;
+    }
+    return Y;
 }
 xt::xarray<double> FCLayer::backward(xt::xarray<double> DY) {
     //YOUR CODE IS HERE
-        // Gradient of weights: dL/dW = dL/dY * dY/dW
-    m_aGrad_W = xt::linalg::dot(xt::transpose(DY), m_aCached_X);
-
-    // Gradient of bias: dL/db = dL/dY
+    m_unSample_Counter++;
+    m_aGrad_W = xt::linalg::tensordot(xt::transpose(m_aCached_X), DY, {1}, {0});
     if (m_bUse_Bias) {
-        m_aGrad_b = xt::sum(DY, {0}); // Sum over batch dimension
+         m_aGrad_b = xt::sum(DY, {0});
     }
-
-    // Gradient of input: dL/dX = dL/dY * dY/dX
-    xt::xarray<double> DX = xt::linalg::dot(DY, xt::transpose(m_aWeights));
-
-    return DX;
+    xt::xarray<double> dX = xt::linalg::tensordot(DY, m_aWeights, {1}, {1});
+    return dX;
 }
 
 int FCLayer::register_params(IParamGroup* ptr_group){

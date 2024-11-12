@@ -28,9 +28,18 @@ ReLU::~ReLU() {
 
 xt::xarray<double> ReLU::forward(xt::xarray<double> X) {
     //YOUR CODE IS HERE
+    m_aMask = X >= 0;
+
+    // Tính đầu ra Y = M ⊙ X (nhân phần tử tương ứng)
+    xt::xarray<double> Y = m_aMask * X;
+
+    return Y;
 }
 xt::xarray<double> ReLU::backward(xt::xarray<double> DY) {
     //YOUR CODE IS HERE
+    // Đạo hàm của ReLU là 1 nếu X >= 0, 0 nếu X < 0. Tính đạo hàm đối với DY
+    xt::xarray<double> dX = m_aMask * DY; // Nhân phần tử với mặt nạ M_cache
+    return dX;
 }
 
 string ReLU::get_desc(){
