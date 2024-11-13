@@ -8,7 +8,7 @@ using namespace std;
 #include <list/XArrayListDemo.h>
 #include <Test2 - BTL 2.h>
 
-int main(){
+int main(int argc, char* argv[]){
     // cout << "\ndlistDemo1\n";
     // xlistDemo1();
     // cout << "\n\ndlistDemo2\n";

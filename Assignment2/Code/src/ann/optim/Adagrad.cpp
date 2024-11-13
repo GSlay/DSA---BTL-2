@@ -25,5 +25,14 @@ Adagrad::~Adagrad() {
 
 IParamGroup* Adagrad::create_group(string name){
     //YOUR CODE IS HERE
+    // Create a new parameter group to manage the learning rate and gradient information
+    AdaParamGroup* group = new AdaParamGroup(name);
+    
+    // Initialize the squared gradients accumulator for the parameters
+    // Typically, you'll need a tensor initialized with zeros, representing the accumulated squared gradients
+    // You can initialize this tensor with zeros or any other method your framework provides
+    group->set_squared_gradients(xt::zeros<double>({1}));  // Example: Assuming it's a 1D tensor
+    
+    return group;
 }
 

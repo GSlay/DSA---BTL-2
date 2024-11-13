@@ -4,7 +4,7 @@
 # (2) Name of the program
 #####################################################################################
 SRC := src
-BIN := program
+BIN := test
 
 OBJ := obj
 MKDIR := mkdir -p
