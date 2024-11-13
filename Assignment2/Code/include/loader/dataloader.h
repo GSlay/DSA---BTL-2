@@ -95,7 +95,7 @@ public:
             xt::xarray<DType> batch_data;
             xt::xarray<LType> batch_label;
             for (int i = batch_index; i < batch_end; i++){
-                int index = data_loader->index_arr[i];
+                int index = data_loader->item_indices[i];
                 auto data_label = data_loader->ptr_dataset->getitem(index);
                 if (i == batch_index){
                     batch_data = xt::expand_dims(data_label.getData(), 0);

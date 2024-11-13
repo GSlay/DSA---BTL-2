@@ -31,8 +31,8 @@ xt::xarray<double> Softmax::forward(xt::xarray<double> X) {
     //YOUR CODE IS HERE
     // Tính toán softmax cho mỗi hàng trong X
     // Đầu tiên, trừ giá trị lớn nhất trong mỗi hàng để tránh vấn đề tràn số học
-    xt::xarray<double> exp_X = xt::exp(X - xt::amax(X, 1, true));  // {1} là axis=1 (theo hàng)
-    xt::xarray<double> sum_exp_X = xt::sum(exp_X, 1, true);  // Tính tổng exp(X) theo mỗi hàng
+    xt::xarray<double> exp_X = xt::exp(X - xt::amax(X, 1));  // {1} là axis=1 (theo hàng)
+    xt::xarray<double> sum_exp_X = xt::sum(exp_X, 1);  // Tính tổng exp(X) theo mỗi hàng
     m_aCached_Y = exp_X / sum_exp_X;  // Chuẩn hóa các giá trị
 
     return m_aCached_Y;

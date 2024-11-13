@@ -94,7 +94,7 @@ double_tensor MLPClassifier::predict(
     unsigned long long nsamples = 0;
     for(auto batch: *pLoader){
         //YOUR CODE IS HERE
-        double_tensor batch_results = this->predict(batch.X, make_decision);
+        double_tensor batch_results = this->predict(batch.getData(), make_decision);
         if (first_batch) {
             results = batch_results;
             first_batch = false;
@@ -226,8 +226,8 @@ bool MLPClassifier::save(string model_path){
         }
         cout << model_path << ": creation" << endl;
         fs::create_directories(model_path);
-        string arch_file =  fs::path(model_path)/
-                            fs::path(m_pConfig->get("arch_file", "arch.txt"));
+        string arch_file =  (fs::path(model_path)/
+                            fs::path(m_pConfig->get("arch_file", "arch.txt"))).string();
 
         //open stream
         ofstream datastream(arch_file);
