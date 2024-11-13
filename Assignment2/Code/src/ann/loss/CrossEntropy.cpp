@@ -26,20 +26,37 @@ CrossEntropy::~CrossEntropy() {
 
 double CrossEntropy::forward(xt::xarray<double> X, xt::xarray<double> t){
     //YOUR CODE IS HERE
-    // Y: Dự đoán của mô hình, T: Nhãn thực tế (soft-label hoặc hard-label)
-    
-    // Tính toán Cross-Entropy cho từng mẫu
-    xt::xarray<double> ce = -t * xt::log(X);  // EPSILON tránh chia cho 0, đảm bảo không bị log(0)
+    const double EPSILON = 1e-7;
+    int N_norm = (m_eReduction !=  REDUCE_MEAN) ? 1 : X.shape(0);
+    double loss = 0.0;
+    bool is_soft_label = t.dimension() == 2 and t.shape(1) > 1;
 
-    // Tổng hoặc trung bình các giá trị Cross-Entropy (reduce_mean=true là trung bình, false là tổng)
-    double loss = m_eReduction ? xt::sum(ce)() / X.shape(0) : xt::sum(ce)();
+    // Lưu các biến cache cho forward
+    m_aCached_Ypred = X;
+    m_aYtarget = t;
+
+    // Y: Dự đoán của mô hình, T: Nhãn thực tế (soft-label hoặc hard-label)
+    xt::xarray<double> ce;
+    // Tính toán Cross-Entropy cho từng mẫu
+    if ((is_soft_label)) {
+        ce = -t * xt::log(X + EPSILON);  // EPSILON tránh chia cho 0, đảm bảo không bị log(0)
+        loss = xt::sum(ce)();
+    }
+    else {
+        for (int i = 0; i < X.shape(0); ++i) {
+            int class_index = t(i);  // Lớp đúng của mẫu thứ i
+            loss -= std::log(X(i, class_index) + EPSILON);  // Log của xác suất lớp đúng
+        }
+    }
+    // Tổng hoặc trung bình các giá trị Cross-Entropy (reduce_mean lấy trung bình)
+    loss *= 1/N_norm;
 
     return loss;
 }
 xt::xarray<double> CrossEntropy::backward() {
     //YOUR CODE IS HERE
-    const int EPSILON = 10e-7;
-    int N_norm = m_eReduction ? 1 : m_aCached_Ypred.shape(0);
+    const double EPSILON = 1e-7;
+    int N_norm = (m_eReduction !=  REDUCE_MEAN) ? 1 : m_aCached_Ypred.shape(0);
     // Tính gradient của hàm Cross-Entropy theo công thức (28)
     xt::xarray<double> dY =  - 1/N_norm * (m_aYtarget / (m_aCached_Ypred + EPSILON));  // Đảm bảo không chia cho 0 nhờ EPSILON
 

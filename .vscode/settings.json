@@ -69,6 +69,14 @@
         "filesystem": "cpp",
         "ios": "cpp",
         "locale": "cpp",
-        "list": "cpp"
+        "list": "cpp",
+        "cfenv": "cpp",
+        "cinttypes": "cpp",
+        "cstdarg": "cpp",
+        "source_location": "cpp",
+        "semaphore": "cpp",
+        "stop_token": "cpp",
+        "thread": "cpp",
+        "typeindex": "cpp"
     }
 }
