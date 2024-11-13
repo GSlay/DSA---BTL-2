@@ -367,7 +367,7 @@ void Heap<T>::reheapUp(int position){
 }
 
 template<class T>
-void Heap<T>::#ffffff00(int position){
+void Heap<T>::reheapDown(int position){
     //YOUR CODE IS HERE
     int leftChild, rightChild, tmpChild;
 
