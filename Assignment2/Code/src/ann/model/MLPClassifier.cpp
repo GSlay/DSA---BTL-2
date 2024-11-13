@@ -60,6 +60,11 @@ double_tensor MLPClassifier::predict(double_tensor X, bool make_decision){
     //DO the inference
     
     //YOUR CODE IS HERE
+    // Forward pass through the network
+    double_tensor Y = X;
+    for (auto layer : m_layers) {
+        Y = layer->forward(Y);  // Assuming layers have a forward method
+    }
     
     //RESTORE the previous mode
     this->set_working_mode(old_mode);
@@ -89,6 +94,13 @@ double_tensor MLPClassifier::predict(
     unsigned long long nsamples = 0;
     for(auto batch: *pLoader){
         //YOUR CODE IS HERE
+        double_tensor batch_results = this->predict(batch.X, make_decision);
+        if (first_batch) {
+            results = batch_results;
+            first_batch = false;
+        } else {
+            results = xt::concatenate(xt::xtuple(results, batch_results), 0);
+        }        
     }
     cout << "Prediction: End" << endl;
     
@@ -108,7 +120,39 @@ double_tensor MLPClassifier::evaluate(DataLoader<double, double>* pLoader){
     meter.reset_metrics();
     
     //YOUR CODE IS HERE
+    double_tensor all_predictions;
+    double_tensor all_labels;
+    
+    // int total_samples = 0;
+    // int total_correct = 0;
 
+    //Evaluation: Started
+    
+    int total_batch = pLoader->get_total_batch();
+    int batch_idx = 1;
+    for (auto batch : *pLoader) {
+        // Get the inputs and labels from the DataLoader
+        double_tensor X = batch.getData();
+        double_tensor y_true = batch.getLabel();
+
+        // Perform a forward pass (predictions)
+        double_tensor y_pred = this->predict(X, false);  // No decision, just the probabilities or raw predictions
+
+        // Store true labels and predicted labels for metric calculation
+        all_labels = xt::concatenate(xt::xtuple(all_labels, y_true), 0);  // Concatenate true labels
+        all_predictions = xt::concatenate(xt::xtuple(all_predictions, y_pred), 0);  // Concatenate predictions
+
+        // Increment the number of samples processed
+        // total_samples += y_true.shape()[0];
+        // Print batch progress
+        // cout << fmt::format("{:<6d}/{:<12d}|{:<50d}\n", batch_idx, total_batch, total_samples);
+        batch_idx++;
+    }
+
+    //Evaluation: End
+
+    // Calculate the final metrics
+    double_tensor metrics = meter.calculate_metrics(all_labels, all_predictions);
     //
     this->set_working_mode(old_mode);
     return metrics;
@@ -145,9 +189,19 @@ void MLPClassifier::set_working_mode(bool trainable){
 //protected: for the training mode: begin
 double_tensor MLPClassifier::forward(double_tensor X){
     //YOUR CODE IS HERE
+    double_tensor output = X;
+    for (auto layer : m_layers) {
+        output = layer->forward(output);  // Forward pass
+    }
+    return output;
 }
 void MLPClassifier::backward(){
     //YOUR CODE IS HERE
+    double_tensor dY = m_pLossLayer->backward();
+    for (auto layer : m_layers) {
+        layer->backward(dY);  // Backward pass
+        dY = layer->backward(dY);
+    }
 }
 //protected: for the training mode: end
 
