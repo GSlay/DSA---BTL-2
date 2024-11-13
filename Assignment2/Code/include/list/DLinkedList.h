@@ -228,6 +228,74 @@ public:
             return iterator;
         }
     };
+
+        //////////////////////////////////////////////////////////////////////
+    class BWDIterator
+    {
+    private:
+        DLinkedList<T> *pList;
+        Node *pNode;
+
+    public:
+        BWDIterator(DLinkedList<T> *pList = 0, bool begin = true)
+        {
+            if (begin)
+            {
+                if (pList != 0)
+                    this->pNode = pList->tail->prev;
+                else
+                    pNode = 0;
+            }
+            else
+            {
+                if (pList != 0)
+                    this->pNode = pList->head;
+                else
+                    pNode = 0;
+            }
+            this->pList = pList;
+        }
+
+        BWDIterator &operator=(const Iterator &iterator)
+        {
+            this->pNode = iterator.pNode;
+            this->pList = iterator.pList;
+            return *this;
+        }
+        void remove(void (*removeItemData)(T) = 0)
+        {
+            pNode->next->prev = pNode->prev;
+            pNode->prev->next = pNode->next;
+            Node * pPrev = pNode->next; // MUST next, so iterator++ will go to head
+            if (removeItemData != 0)
+                removeItemData(pNode->data);
+            delete pNode;
+            pNode = pPrev;
+            pList->count -= 1;
+        }
+
+        T &operator*()
+        {
+            return pNode->data;
+        }
+        bool operator!=(const Iterator &iterator)
+        {
+            return pNode != iterator.pNode;
+        }
+        // Prefix ++ overload
+        BWDIterator &operator++()
+        {
+            pNode = pNode->prev;
+            return *this;
+        }
+        // Postfix ++ overload
+        BWDIterator operator++(int)
+        {
+            Iterator iterator = *this;
+            ++*this;
+            return iterator;
+        }
+    };
 };
 //////////////////////////////////////////////////////////////////////
 // Define a shorter name for DLinkedList:

@@ -77,7 +77,8 @@
         "semaphore": "cpp",
         "stop_token": "cpp",
         "thread": "cpp",
-        "typeindex": "cpp"
+        "typeindex": "cpp",
+        "text_encoding": "cpp"
     },
     "cmake.sourceDirectory": "C:/Users/khach/OneDrive/Documents/Learning/DSA/DSA---BTL-2/Assignment2/Code/include/tensor/xflens/cxxblas",
     "makefile.makefilePath": "C:\\Users\\khach\\OneDrive\\Documents\\Learning\\DSA\\DSA---BTL-2\\Assignment2\\Code\\Makefile",
