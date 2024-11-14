@@ -120,6 +120,7 @@ double_tensor MLPClassifier::evaluate(DataLoader<double, double>* pLoader){
     meter.reset_metrics();
     
     //YOUR CODE IS HERE
+    cout << "MLPClassifier.evaluate()";
     double_tensor all_predictions;
     double_tensor all_labels;
     

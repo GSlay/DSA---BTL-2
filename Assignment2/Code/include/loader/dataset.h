@@ -97,6 +97,7 @@ public:
     int len(){
         /* TODO: your code is here to return the dataset's length
          */
+        cout << "DataSet.len()" << endl;
         return data_shape[0]; //remove it when complete
     }
     

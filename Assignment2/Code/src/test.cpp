@@ -27,5 +27,14 @@ int main(int argc, char* argv[]){
     // dlistDemo5();
     // cout << "\n\ndlistDemo6\n";
     // dlistDemo6();
+    // xt::random::seed(42);
+    // DSFactory factory("./config.txt");
+    // xmap<string, TensorDataset<double, double>*>* pMap = factory.get_datasets_2cc();
+    // TensorDataset<double, double>* train_ds = pMap->get("train_ds");
+    // TensorDataset<double, double>* valid_ds = pMap->get("valid_ds");
+    // TensorDataset<double, double>* test_ds = pMap->get("test_ds");
+    // DataLoader<double, double> train_loader(train_ds, 50, true, false);
+    // DataLoader<double, double> valid_loader(valid_ds, 50, false, false);
+    // DataLoader<double, double> test_loader(test_ds, 50, false, false);
     runAll();
 }

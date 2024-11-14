@@ -35,6 +35,7 @@ void IModel::fit(DataLoader<double, double>* pTrainLoader,
             
             //(0) Set gradient buffer to zeros
             //YOUR CODE IS HERE
+            cout << "IModel.fit()";
             m_pOptimizer->zero_grad();
             
             //(1) FORWARD-Pass
