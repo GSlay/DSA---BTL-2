@@ -272,13 +272,11 @@ void mlpDemo1() {
         new FCLayer(50, nClasses, true),
         new Softmax()
     };
-    cout << 1;
     MLPClassifier model("./config.txt", "2c-classification", layers, sizeof(layers)/sizeof(ILayer*));
 
     SGD optim(2e-3);
     CrossEntropy loss;
     ClassMetrics metrics(nClasses);
-
     model.compile(&optim, &loss, &metrics);
     model.fit(&train_loader, &valid_loader, 10);
     string base_path = "./models";
@@ -306,7 +304,7 @@ void mlpDemo2() {
         new FCLayer(50, nClasses, true),
         new Softmax()
     };
-
+    cout << 1;
     MLPClassifier model("./config.txt", "2c-classification", layers, sizeof(layers)/sizeof(ILayer*));
 
     SGD optim(2e-3);

@@ -35,7 +35,6 @@ void IModel::fit(DataLoader<double, double>* pTrainLoader,
             
             //(0) Set gradient buffer to zeros
             //YOUR CODE IS HERE
-            cout << "IModel.fit()";
             m_pOptimizer->zero_grad();
             
             //(1) FORWARD-Pass
@@ -49,6 +48,7 @@ void IModel::fit(DataLoader<double, double>* pTrainLoader,
 
             //(3) UPDATE learnable parameters
             //YOUR CODE IS HERE
+            cout << "IModel.fit()3" << endl;
             m_pOptimizer->step();
             
             //Record the performance for each batch

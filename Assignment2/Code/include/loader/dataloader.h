@@ -41,7 +41,6 @@ public:
                 m_seed(seed){
             nbatch = ptr_dataset->len()/batch_size;
             item_indices = xt::arange(0, ptr_dataset->len());
-            cout << "DataLoader Constructor" << endl;
     }
     virtual ~DataLoader(){}
     

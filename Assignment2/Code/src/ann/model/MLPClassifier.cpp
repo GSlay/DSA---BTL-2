@@ -192,6 +192,7 @@ double_tensor MLPClassifier::forward(double_tensor X){
     //YOUR CODE IS HERE
     double_tensor output = X;
     for (auto layer : m_layers) {
+        cout << layer->getname() << endl;
         output = layer->forward(output);  // Forward pass
     }
     return output;
@@ -200,6 +201,7 @@ void MLPClassifier::backward(){
     //YOUR CODE IS HERE
     double_tensor dY = m_pLossLayer->backward();
     for (auto layer : m_layers) {
+        cout << layer->getname() << endl;
         layer->backward(dY);  // Backward pass
         dY = layer->backward(dY);
     }
