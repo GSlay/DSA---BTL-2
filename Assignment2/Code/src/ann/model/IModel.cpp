@@ -48,7 +48,6 @@ void IModel::fit(DataLoader<double, double>* pTrainLoader,
 
             //(3) UPDATE learnable parameters
             //YOUR CODE IS HERE
-            cout << "IModel.fit()3" << endl;
             m_pOptimizer->step();
             
             //Record the performance for each batch

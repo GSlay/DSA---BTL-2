@@ -278,7 +278,7 @@ public:
         {
             return pNode->data;
         }
-        bool operator!=(const Iterator &iterator)
+        bool operator!=(const BWDIterator &iterator)
         {
             return pNode != iterator.pNode;
         }
@@ -291,7 +291,7 @@ public:
         // Postfix ++ overload
         BWDIterator operator++(int)
         {
-            Iterator iterator = *this;
+            BWDIterator iterator = *this;
             ++*this;
             return iterator;
         }

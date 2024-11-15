@@ -120,9 +120,10 @@ double_tensor MLPClassifier::evaluate(DataLoader<double, double>* pLoader){
     meter.reset_metrics();
     
     //YOUR CODE IS HERE
-    cout << "MLPClassifier.evaluate()";
-    double_tensor all_predictions;
-    double_tensor all_labels;
+    // cout << "MLPClassifier.evaluate()";
+    double_tensor all_labels = xt::xarray<double>::from_shape({0});  // Adjust shape as needed
+    double_tensor all_predictions = xt::xarray<double>::from_shape({0});
+
     
     // int total_samples = 0;
     // int total_correct = 0;
@@ -131,6 +132,7 @@ double_tensor MLPClassifier::evaluate(DataLoader<double, double>* pLoader){
     
     int total_batch = pLoader->get_total_batch();
     int batch_idx = 1;
+    bool first = true;
     for (auto batch : *pLoader) {
         // Get the inputs and labels from the DataLoader
         double_tensor X = batch.getData();
@@ -138,10 +140,20 @@ double_tensor MLPClassifier::evaluate(DataLoader<double, double>* pLoader){
 
         // Perform a forward pass (predictions)
         double_tensor y_pred = this->predict(X, false);  // No decision, just the probabilities or raw predictions
-
+        // if (first) {
+        //     all_labels = 
+        // }
         // Store true labels and predicted labels for metric calculation
-        all_labels = xt::concatenate(xt::xtuple(all_labels, y_true), 0);  // Concatenate true labels
-        all_predictions = xt::concatenate(xt::xtuple(all_predictions, y_pred), 0);  // Concatenate predictions
+        if (all_labels.size() == 0) {
+            all_labels = y_true;
+        } else {
+            all_labels = xt::concatenate(xt::xtuple(all_labels, y_true), 0);
+        }
+        if (all_predictions.size() == 0) {
+            all_predictions = y_pred;
+        } else {
+            all_predictions = xt::concatenate(xt::xtuple(all_predictions, y_pred), 0);
+        }
 
         // Increment the number of samples processed
         // total_samples += y_true.shape()[0];
@@ -192,7 +204,6 @@ double_tensor MLPClassifier::forward(double_tensor X){
     //YOUR CODE IS HERE
     double_tensor output = X;
     for (auto layer : m_layers) {
-        cout << layer->getname() << endl;
         output = layer->forward(output);  // Forward pass
     }
     return output;
@@ -200,10 +211,9 @@ double_tensor MLPClassifier::forward(double_tensor X){
 void MLPClassifier::backward(){
     //YOUR CODE IS HERE
     double_tensor dY = m_pLossLayer->backward();
-    for (auto layer : m_layers) {
-        cout << layer->getname() << endl;
-        layer->backward(dY);  // Backward pass
-        dY = layer->backward(dY);
+    for (DLinkedList<ILayer*>::BWDIterator it = m_layers.bbegin();
+     it != m_layers.bend(); it++) {
+        dY = (*it)->backward(dY);
     }
 }
 //protected: for the training mode: end

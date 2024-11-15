@@ -144,23 +144,44 @@ FCLayer::~FCLayer() {
 
 xt::xarray<double> FCLayer::forward(xt::xarray<double> X) {
     //YOUR CODE IS HERE
+    // cout << "-- FCForw --" << endl;
+    // cout << "m_aWeights shape: " << shape2str(m_aWeights.shape());
+    // cout << "X shape: " << shape2str(X.shape());
     if (m_trainable) {
         m_aCached_X = X;
     }
+    // cout << "m_aCached_X shape: " << shape2str(m_aCached_X.shape());
     auto Y = xt::linalg::tensordot(X, xt::transpose(m_aWeights), {1}, {0});
     if (m_bUse_Bias) {
         Y += m_aBias;
     }
+    // cout << "Y shape: " << shape2str(Y.shape()) << endl;
     return Y;
 }
 xt::xarray<double> FCLayer::backward(xt::xarray<double> DY) {
     //YOUR CODE IS HERE
+    // cout << "-- FCBackw --" << endl;
     m_unSample_Counter++;
-    m_aGrad_W = xt::linalg::tensordot(xt::transpose(m_aCached_X), DY, {1}, {0});
+    // cout << endl;
+    // cout << endl;
+    // cout << "Shape of m_aCached_X: " << shape2str((m_aCached_X).shape()) << endl;
+    // cout << "Shape of DY: " << shape2str(DY.shape()) << endl;
+    // cout << 0 << endl;
+    // Tính delta_W_mean
+    m_aGrad_W = xt::linalg::tensordot(DY, xt::transpose(m_aCached_X), {0}, {1});
+    // cout << 1 << endl;
+    // cout << "Shape of delta_W: " << shape2str(delta_W.shape()) << endl;
+    // cout << "Shape of m_aGrad_W: " << shape2str(m_aGrad_W.shape()) << endl;
+    // cout << 2 << endl;
     if (m_bUse_Bias) {
-         m_aGrad_b = xt::sum(DY, {0});
+        m_aGrad_b = xt::sum(DY, {0});
     }
-    xt::xarray<double> dX = xt::linalg::tensordot(DY, m_aWeights, {1}, {1});
+    // cout << 3 << endl;
+    xt::xarray<double> dX = xt::linalg::dot(DY, (m_aWeights));
+    // cout << "Shape of m_aBias: " << shape2str(m_aBias.shape()) << endl;
+    // cout << "Shape of m_aGrad_b: " << shape2str(m_aGrad_b.shape()) << endl;
+    // cout << "Shape of m_aWeights: " << shape2str(m_aWeights.shape()) << endl;
+    // cout << "Shape of dX: " << shape2str(dX.shape()) << endl;
     return dX;
 }
 

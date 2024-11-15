@@ -36,5 +36,15 @@ int main(int argc, char* argv[]){
     // DataLoader<double, double> train_loader(train_ds, 50, true, false);
     // DataLoader<double, double> valid_loader(valid_ds, 50, false, false);
     // DataLoader<double, double> test_loader(test_ds, 50, false, false);
+        xt::xarray<double> A = xt::random::randn<double>({50, 2});  // Shape (50, 2)
+    xt::xarray<double> B = xt::random::randn<double>({2, 50});  // Shape (2, 50)
+
+    // Use tensordot with axes configured to produce shape (2, 50)
+    xt::xarray<double> C = xt::linalg::tensordot(A, B, {}, {1});
+
+    // Print the resulting shape
+    std::cout << "Shape of C: " << shape2str(C.shape()) << std::endl;
+
     runAll();
+    return 0;
 }
