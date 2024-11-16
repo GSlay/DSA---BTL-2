@@ -39,12 +39,16 @@ void IModel::fit(DataLoader<double, double>* pTrainLoader,
             
             //(1) FORWARD-Pass
             //YOUR CODE IS HERE
+            // cout << "Y before: " << X << endl;
             double_tensor Y = forward(X);
+            // cout << "Y after: " << Y << endl;
+
+            // cout << "t: " << t << endl;
             
             //(2) BACKWARD-Pass
             //YOUR CODE IS HERE
             double batch_loss = m_pLossLayer->forward(Y, t); // Calculate loss of Y and t (true label)
-            // cout << batch_loss << endl;
+            // cout << "batch_loss = " << batch_loss << endl;
             backward();
 
             //(3) UPDATE learnable parameters

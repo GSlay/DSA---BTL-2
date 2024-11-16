@@ -26,12 +26,32 @@ CrossEntropy::~CrossEntropy() {
 
 double CrossEntropy::forward(xt::xarray<double> X, xt::xarray<double> t){
     //YOUR CODE IS HERE
-    const double EPSILON = 0;
+    const double EPSILON = 1e-17;
     int N_norm = (m_eReduction !=  REDUCE_MEAN) ? 1 : X.shape(0);
     // cout << m_eReduction << " " << N_norm << endl;
     double loss = 0.0;
-    bool is_soft_label = t.dimension() == 2 and t.shape(1) > 1;
-    bool is_binary_classification = (X.dimension() == 1);  // Kiểm tra BCE cho phân loại hai lớp
+    bool is_soft_label = false;
+    for (size_t i = 0; i < t.shape(0); ++i) {
+        // Lấy hàng thứ i trong ma trận T
+        auto row = xt::view(t, i, xt::all());
+        // Kiểm tra nếu tổng các phần tử trong hàng là 1 và tất cả phần tử là 0 hoặc 1
+        if (std::abs(xt::sum(row)() - 1.0) > EPSILON || xt::any(row < 0.0 || row > 1.0)) {
+            is_soft_label = true;
+            break;
+        }
+    }
+
+    bool is_binary_classification = true;  // Kiểm tra BCE cho phân loại hai lớp
+    for (size_t i = 0; i < X.shape(0); ++i) {
+        // Lấy hàng thứ i trong ma trận X
+        auto row = xt::view(X, i, xt::all());
+        // Kiểm tra nếu tổng các phần tử trong hàng bằng 1
+        if (xt::sum(row)() == 1.0) {
+            // cout << row << endl;
+            is_binary_classification = false;
+            break;
+        }
+    }
 
     // Lưu các biến cache cho forward
     m_aCached_Ypred = X;
@@ -47,26 +67,26 @@ double CrossEntropy::forward(xt::xarray<double> X, xt::xarray<double> t){
     }
     else if (is_soft_label) {
         // cout << 2 << endl;
-        ce = -t * xt::log(X + EPSILON);  // EPSILON tránh chia cho 0, đảm bảo không bị log(0)
-        loss = xt::sum(ce)();
+        // Duyệt qua các mẫu dữ liệu
+        loss = -xt::sum(t * xt::log(X + EPSILON))();
     }
     else {
         // cout << 3 << endl;
         for (int i = 0;i < X.shape(0); i++) {
-            int class_index = t(i);  // Lớp đúng của mẫu thứ i
-            loss -= log(X(i, class_index) + EPSILON);  // Log của xác suất lớp đúng
+            auto class_index = xt::argmax(xt::view(t, i, xt::all()))();
+            loss -= std::log(X(i, class_index) + EPSILON);
         }
     }
     // cout << "loss = " << loss << endl;
     // Tổng hoặc trung bình các giá trị Cross-Entropy (reduce_mean lấy trung bình)
-    loss *= (double)1/N_norm;
+    loss *= 1.0/N_norm;
     // cout << "loss_2 = " << loss << endl;
 
     return loss;
 }
 xt::xarray<double> CrossEntropy::backward() {
     //YOUR CODE IS HERE
-    const double EPSILON = 1e-7;
+    const double EPSILON = 1e-17;
     int N_norm = (m_eReduction !=  REDUCE_MEAN) ? 1 : m_aCached_Ypred.shape(0);
 
     xt::xarray<double> dY;
@@ -77,7 +97,7 @@ xt::xarray<double> CrossEntropy::backward() {
     }
     else {
         // Tính gradient của hàm Cross-Entropy theo công thức (28)
-        dY =  - 1/N_norm * (m_aYtarget / (m_aCached_Ypred + EPSILON));  // Đảm bảo không chia cho 0 nhờ EPSILON
+        dY =  - 1.0/N_norm * (m_aYtarget / (m_aCached_Ypred + EPSILON));  // Đảm bảo không chia cho 0 nhờ EPSILON
     }
     return dY;
 }

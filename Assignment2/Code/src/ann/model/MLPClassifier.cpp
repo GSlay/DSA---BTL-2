@@ -62,9 +62,13 @@ double_tensor MLPClassifier::predict(double_tensor X, bool make_decision){
     //YOUR CODE IS HERE
     // Forward pass through the network
     double_tensor Y = X;
+    // cout << "Y before pred: " << Y << endl;
     for (auto layer : m_layers) {
+        // cout << layer->getname() << " Y:" << endl;
         Y = layer->forward(Y);  // Assuming layers have a forward method
+        // cout << Y << endl;
     }
+    // cout << "Y in pred: " << Y << endl;
     
     //RESTORE the previous mode
     this->set_working_mode(old_mode);
@@ -155,7 +159,7 @@ double_tensor MLPClassifier::evaluate(DataLoader<double, double>* pLoader){
         // cout << "Shape of all_predictions: " << xt::adapt(all_predictions.shape()) << std::endl;
 
         // Perform a forward pass (predictions)
-        double_tensor y_pred = this->predict(X, false);  // No decision, just the probabilities or raw predictions
+        double_tensor y_pred = predict(X, false);  // No decision, just the probabilities or raw predictions
         // Store true labels and predicted labels for metric calculation
         // Assuming y_pred is the predicted class (e.g., indices)
         // cout << 3 << endl;
@@ -203,8 +207,8 @@ double_tensor MLPClassifier::evaluate(DataLoader<double, double>* pLoader){
     }
     // cout << 7 << endl;
 
-    // assert(all_labels.size() > 0 && "all_labels remains empty after batch processing!");
-    // assert(all_predictions.size() > 0 && "all_predictions remains empty after batch processing!");
+    // std::cout << "All labels: " << batch_idx << ": " << all_labels << std::endl;
+    // std::cout << "All pred:" << batch_idx << ": " << all_predictions << std::endl;
 
     //Evaluation: End
 
@@ -248,7 +252,9 @@ double_tensor MLPClassifier::forward(double_tensor X){
     //YOUR CODE IS HERE
     double_tensor output = X;
     for (auto layer : m_layers) {
+        // cout << layer->getname() << " Y:" << endl;
         output = layer->forward(output);  // Forward pass
+        // cout << output << endl;
     }
     return output;
 }
