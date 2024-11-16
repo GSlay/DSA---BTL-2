@@ -304,7 +304,6 @@ void mlpDemo2() {
         new FCLayer(50, nClasses, true),
         new Softmax()
     };
-    cout << 1;
     MLPClassifier model("./config.txt", "2c-classification", layers, sizeof(layers)/sizeof(ILayer*));
 
     SGD optim(2e-3);
