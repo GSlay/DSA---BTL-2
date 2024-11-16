@@ -123,9 +123,8 @@ double_tensor MLPClassifier::evaluate(DataLoader<double, double>* pLoader){
     // cout << "MLPClassifier.evaluate()";
     double_tensor all_labels = xt::xarray<double>::from_shape({0});  // Adjust shape as needed
     double_tensor all_predictions = xt::xarray<double>::from_shape({0});
-
     
-    // int total_samples = 0;
+    int total_samples = 0;
     // int total_correct = 0;
 
     //Evaluation: Started
@@ -137,30 +136,75 @@ double_tensor MLPClassifier::evaluate(DataLoader<double, double>* pLoader){
         // Get the inputs and labels from the DataLoader
         double_tensor X = batch.getData();
         double_tensor y_true = batch.getLabel();
+        // cout << 1 << endl;
+
+        if (X.size() == 0 || y_true.size() == 0) {
+            std::cerr << "Empty batch encountered at batch index: " << batch_idx << std::endl;
+            continue;
+        }
+
+
+        // Ensure y_true is in the correct format (indices, not one-hot)
+        if (y_true.dimension() > 1) {
+            y_true = xt::argmax(y_true, 1);  // Convert to class indices
+        }
+        // cout << 2 << endl;
+        
+        // cout << "Shape of all_labels: " << xt::adapt(all_labels.shape()) << std::endl;
+        // cout << "Shape of y_true: " << xt::adapt(y_true.shape()) << std::endl;
+        // cout << "Shape of all_predictions: " << xt::adapt(all_predictions.shape()) << std::endl;
 
         // Perform a forward pass (predictions)
         double_tensor y_pred = this->predict(X, false);  // No decision, just the probabilities or raw predictions
-        // if (first) {
-        //     all_labels = 
-        // }
         // Store true labels and predicted labels for metric calculation
+        // Assuming y_pred is the predicted class (e.g., indices)
+        // cout << 3 << endl;
+
+        assert(y_pred.size() > 0 && "Prediction tensor is empty!");
+
+
+        if (y_pred.dimension() > 1) {
+            y_pred = xt::argmax(y_pred, 1);  // Convert to class indices if it contains probabilities
+        }
+        // cout << 4 << endl;
+
+        // std::cout << "y_true for batch " << batch_idx << ": " << y_true << std::endl;
+        // std::cout << "y_pred for batch " << batch_idx << ": " << y_pred << std::endl;
+
+        // cout << "Shape of y_pred: " << xt::adapt(y_pred.shape()) << std::endl;
+
         if (all_labels.size() == 0) {
             all_labels = y_true;
         } else {
-            all_labels = xt::concatenate(xt::xtuple(all_labels, y_true), 0);
+            double_tensor tmp = xt::concatenate(xt::xtuple(all_labels, y_true), 0);
+            // std::cout << "tmp_label for batch " << batch_idx << ": " << tmp << std::endl;
+            all_labels = tmp;
+
         }
+        // cout << 5 << endl;
+
         if (all_predictions.size() == 0) {
             all_predictions = y_pred;
         } else {
-            all_predictions = xt::concatenate(xt::xtuple(all_predictions, y_pred), 0);
+            double_tensor tmp = xt::concatenate(xt::xtuple(all_predictions, y_pred), 0);
+            // std::cout << "tmp_pred for batch " << batch_idx << ": " << tmp << std::endl;
+            all_predictions = tmp;
         }
+        // cout << 6 << endl;
+
+        // std::cout << "All labels for batch " << batch_idx << ": " << all_labels << std::endl;
+        // std::cout << "All pred for batch " << batch_idx << ": " << all_predictions << std::endl;
 
         // Increment the number of samples processed
-        // total_samples += y_true.shape()[0];
+        total_samples += y_true.shape()[0];
         // Print batch progress
         // cout << fmt::format("{:<6d}/{:<12d}|{:<50d}\n", batch_idx, total_batch, total_samples);
         batch_idx++;
     }
+    // cout << 7 << endl;
+
+    // assert(all_labels.size() > 0 && "all_labels remains empty after batch processing!");
+    // assert(all_predictions.size() > 0 && "all_predictions remains empty after batch processing!");
 
     //Evaluation: End
 

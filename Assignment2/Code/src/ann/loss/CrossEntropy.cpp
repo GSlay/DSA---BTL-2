@@ -26,13 +26,12 @@ CrossEntropy::~CrossEntropy() {
 
 double CrossEntropy::forward(xt::xarray<double> X, xt::xarray<double> t){
     //YOUR CODE IS HERE
-    const double EPSILON = 1e-7;
+    const double EPSILON = 0;
     int N_norm = (m_eReduction !=  REDUCE_MEAN) ? 1 : X.shape(0);
+    // cout << m_eReduction << " " << N_norm << endl;
     double loss = 0.0;
     bool is_soft_label = t.dimension() == 2 and t.shape(1) > 1;
     bool is_binary_classification = (X.dimension() == 1);  // Kiểm tra BCE cho phân loại hai lớp
-
-    m_aCached_Ypred = X;
 
     // Lưu các biến cache cho forward
     m_aCached_Ypred = X;
@@ -43,20 +42,25 @@ double CrossEntropy::forward(xt::xarray<double> X, xt::xarray<double> t){
     // Tính toán Cross-Entropy cho từng mẫu
     if (is_binary_classification) {
         // Tính toán Binary Cross-Entropy
+        // cout << 1 << endl;
         loss = -xt::sum(t * xt::log(X + EPSILON) + (1 - t) * xt::log(1 - X + EPSILON))();
     }
-    else if ((is_soft_label)) {
+    else if (is_soft_label) {
+        // cout << 2 << endl;
         ce = -t * xt::log(X + EPSILON);  // EPSILON tránh chia cho 0, đảm bảo không bị log(0)
         loss = xt::sum(ce)();
     }
     else {
-        for (int i = 0; i < X.shape(0); ++i) {
+        // cout << 3 << endl;
+        for (int i = 0;i < X.shape(0); i++) {
             int class_index = t(i);  // Lớp đúng của mẫu thứ i
-            loss -= std::log(X(i, class_index) + EPSILON);  // Log của xác suất lớp đúng
+            loss -= log(X(i, class_index) + EPSILON);  // Log của xác suất lớp đúng
         }
     }
+    // cout << "loss = " << loss << endl;
     // Tổng hoặc trung bình các giá trị Cross-Entropy (reduce_mean lấy trung bình)
-    loss *= 1/N_norm;
+    loss *= (double)1/N_norm;
+    // cout << "loss_2 = " << loss << endl;
 
     return loss;
 }
