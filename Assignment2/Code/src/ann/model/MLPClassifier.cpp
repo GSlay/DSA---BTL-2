@@ -263,7 +263,9 @@ void MLPClassifier::backward(){
     double_tensor dY = m_pLossLayer->backward();
     for (DLinkedList<ILayer*>::BWDIterator it = m_layers.bbegin();
      it != m_layers.bend(); it++) {
+        cout << (*it)->getname() << endl;
         dY = (*it)->backward(dY);
+        cout << dY << endl;
     }
 }
 //protected: for the training mode: end

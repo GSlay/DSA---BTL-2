@@ -39,11 +39,11 @@ void IModel::fit(DataLoader<double, double>* pTrainLoader,
             
             //(1) FORWARD-Pass
             //YOUR CODE IS HERE
-            // cout << "Y before: " << X << endl;
+            cout << "Y before: " << X << endl;
             double_tensor Y = forward(X);
             // cout << "Y after: " << Y << endl;
 
-            // cout << "t: " << t << endl;
+            cout << "t: " << t << endl;
             
             //(2) BACKWARD-Pass
             //YOUR CODE IS HERE

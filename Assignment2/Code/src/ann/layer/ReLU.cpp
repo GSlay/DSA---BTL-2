@@ -28,7 +28,7 @@ ReLU::~ReLU() {
 
 xt::xarray<double> ReLU::forward(xt::xarray<double> X) {
     //YOUR CODE IS HERE
-    m_aMask = X >= 0;
+    m_aMask = xt::cast<double>(X >= 0);
 
     // Tính đầu ra Y = M ⊙ X (nhân phần tử tương ứng)
     xt::xarray<double> Y = m_aMask * X;

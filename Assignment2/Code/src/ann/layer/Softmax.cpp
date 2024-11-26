@@ -29,13 +29,15 @@ Softmax::~Softmax() {
 
 xt::xarray<double> Softmax::forward(xt::xarray<double> X) {
     //YOUR CODE IS HERE
-    // Tính toán softmax cho mỗi hàng trong X
-    // Đầu tiên, trừ giá trị lớn nhất trong mỗi hàng để tránh vấn đề tràn số học
-    xt::xarray<double> exp_X = xt::exp(X - xt::expand_dims(xt::amax(X, 1), 1));
-// {1} là axis=1 (theo hàng)
-    xt::xarray<double> sum_exp_X = xt::expand_dims(xt::sum(exp_X, 1), 1);  // Tính tổng exp(X) theo mỗi hàng
-    m_aCached_Y = exp_X / sum_exp_X;  // Chuẩn hóa các giá trị
+    // Trừ giá trị lớn nhất trên mỗi hàng để ổn định số học
+    auto stable_X = X - xt::expand_dims(xt::amax(X, {1}), 1);
 
+    // Tính e^z
+    auto exp_X = xt::exp(stable_X);
+
+    // Chia tổng e^z trên mỗi hàng
+    auto sum_exp_X = xt::sum(exp_X, {1});
+    m_aCached_Y = exp_X / xt::expand_dims(sum_exp_X, 1);
     return m_aCached_Y;
 }
 xt::xarray<double> Softmax::backward(xt::xarray<double> DY) {

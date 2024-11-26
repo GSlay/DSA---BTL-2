@@ -26,6 +26,14 @@ CrossEntropy::~CrossEntropy() {
 
 double CrossEntropy::forward(xt::xarray<double> X, xt::xarray<double> t){
     //YOUR CODE IS HERE
+    if (xt::any(X <= 0.0 || X >= 1.0)) {
+        std::cerr << "Error: X contains values out of range (0, 1): " << X << std::endl;
+        __throw_bad_alloc();
+    }
+
+    // cout << "Đây là X: " << endl << X << endl;
+    // cout << "Đây là t: " << endl << t << endl;
+    // __throw_invalid_argument("nah");
     const double EPSILON = 1e-17;
     int N_norm = (m_eReduction !=  REDUCE_MEAN) ? 1 : X.shape(0);
     // cout << m_eReduction << " " << N_norm << endl;
@@ -53,7 +61,7 @@ double CrossEntropy::forward(xt::xarray<double> X, xt::xarray<double> t){
         }
     }
 
-    // Lưu các biến cache cho forward
+    // Lưu các biến cache cho backward
     m_aCached_Ypred = X;
     m_aYtarget = t;
 
@@ -63,18 +71,18 @@ double CrossEntropy::forward(xt::xarray<double> X, xt::xarray<double> t){
     if (is_binary_classification) {
         // Tính toán Binary Cross-Entropy
         // cout << 1 << endl;
-        loss = -xt::sum(t * xt::log(X + EPSILON) + (1 - t) * xt::log(1 - X + EPSILON))();
+        loss = -xt::sum(t * xt::log(X) + (1 - t) * xt::log(1 - X + EPSILON))();
     }
     else if (is_soft_label) {
         // cout << 2 << endl;
         // Duyệt qua các mẫu dữ liệu
-        loss = -xt::sum(t * xt::log(X + EPSILON))();
+        loss = -xt::sum(t * xt::log(X))();
     }
     else {
         // cout << 3 << endl;
         for (int i = 0;i < X.shape(0); i++) {
             auto class_index = xt::argmax(xt::view(t, i, xt::all()))();
-            loss -= std::log(X(i, class_index) + EPSILON);
+            loss -= std::log(X(i, class_index));
         }
     }
     // cout << "loss = " << loss << endl;
@@ -86,7 +94,7 @@ double CrossEntropy::forward(xt::xarray<double> X, xt::xarray<double> t){
 }
 xt::xarray<double> CrossEntropy::backward() {
     //YOUR CODE IS HERE
-    const double EPSILON = 1e-17;
+    const double EPSILON = 1e-7;
     int N_norm = (m_eReduction !=  REDUCE_MEAN) ? 1 : m_aCached_Ypred.shape(0);
 
     xt::xarray<double> dY;
